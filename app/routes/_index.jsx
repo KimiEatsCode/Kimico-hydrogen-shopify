@@ -64,8 +64,12 @@ export default function Homepage() {
   const data = useLoaderData();
   return (
     <div className="home">
-      <FeaturedCollection collection={data.featuredCollection} />
+      {/* <FeaturedCollection collection={data.featuredCollection} /> */}
       <RecommendedProducts products={data.recommendedProducts} />
+      <>
+  <s-button variant="primary">Add Product</s-button>
+  <s-button variant="secondary">Save test Theme</s-button>
+</>
     </div>
   );
 }
