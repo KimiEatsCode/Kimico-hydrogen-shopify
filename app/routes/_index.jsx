@@ -13,28 +13,28 @@ export const meta = () => {
 /**
  * @param {Route.LoaderArgs} args
  */
-// export async function loader(args) {
-//   // Start fetching non-critical data without blocking time to first byte
-//   const deferredData = loadDeferredData(args);
+export async function loader(args) {
+  // Start fetching non-critical data without blocking time to first byte
+  const deferredData = loadDeferredData(args);
 
-//   // Await the critical data required to render initial state of the page
-//   const criticalData = await loadCriticalData(args);
+  // Await the critical data required to render initial state of the page
+  const criticalData = await loadCriticalData(args);
 
-//   return {...deferredData, ...criticalData};
-// }
+  return {...deferredData, ...criticalData};
+}
 
 
 // import {defer} from '@shopify/remix-oxygen';
 
-export async function loader(args) {
-  const criticalData = await loadCriticalData(args);
-  const deferredData = loadDeferredData(args);
+// export async function loader(args) {
+//   const criticalData = await loadCriticalData(args);
+//   const deferredData = loadDeferredData(args);
 
-  return defer({
-    ...criticalData,
-    ...deferredData,
-  });
-}
+//   return defer({
+//     ...criticalData,
+//     ...deferredData,
+//   });
+// }
 
 /**
  * Load data necessary for rendering content above the fold. This is the critical data
