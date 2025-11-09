@@ -219,14 +219,13 @@ const PRODUCT_DETAILS_QUERY = `#graphql
     id
     title
     descriptionHtml
-    vendor
     productType
     onlineStoreUrl
     featuredImage {
       url
       altText
     }
-    variants(first: 10) {
+    variants(first: 1) {
       nodes {
         id
         title
@@ -237,7 +236,7 @@ const PRODUCT_DETAILS_QUERY = `#graphql
         sku
       }
     }
-    collections(first: 5) {
+    collections(first: 1) {
       nodes {
         id
         title
