@@ -12,7 +12,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
     <header className="header">
       <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
         <strong>{shop.name}</strong>
-      </NavLink>
+      </NavLink>test pushing to github
       <HeaderMenu
         menu={menu}
         viewport="desktop"
