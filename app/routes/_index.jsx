@@ -45,19 +45,19 @@ async function loadCriticalData({context}) {
  * Make sure to not throw any errors here, as it will cause the page to 500.
  * @param {Route.LoaderArgs}
  */
-function loadDeferredData({context}) {
-  const recommendedProducts = context.storefront
-    .query(RECOMMENDED_PRODUCTS_QUERY)
-    .catch((error) => {
-      // Log query errors, but don't throw them so the page can still render
-      console.error(error);
-      return null;
-    });
+// function loadDeferredData({context}) {
+//   const recommendedProducts = context.storefront
+//     .query(RECOMMENDED_PRODUCTS_QUERY)
+//     .catch((error) => {
+//       // Log query errors, but don't throw them so the page can still render
+//       console.error(error);
+//       return null;
+//     });
 
-  return {
-    recommendedProducts,
-  };
-}
+//   return {
+//     recommendedProducts,
+//   };
+// }
 
 function loadDeferredData({context}) {
   const productDetail = context.storefront
