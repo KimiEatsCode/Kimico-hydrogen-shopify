@@ -59,17 +59,28 @@ function loadDeferredData({context}) {
   };
 }
 
+function loadDeferredData({context}) {
+  const productDetail = context.storefront
+    .query(PRODUCT_DETAILS_QUERY)
+    .catch((error) => {
+      // Log query errors, but don't throw them so the page can still render
+      console.error(error);
+      return null;
+    });
+
+  return {
+    productDetail,
+  };
+}
+
 export default function Homepage() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
   return (
     <div className="home">
       {/* <FeaturedCollection collection={data.featuredCollection} /> */}
-      <RecommendedProducts products={data.recommendedProducts} />
-      <>
-  <s-button variant="primary">Add Product</s-button>
-  <s-button variant="secondary">Save test Theme</s-button>
-</>
+      {/* <RecommendedProducts products={data.recommendedProducts} /> */}
+      <productDetail product={data.productDetail} />
     </div>
   );
 }
@@ -174,6 +185,38 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
       }
     }
   }
+`;
+
+const PRODUCT_DETAILS_QUERY = `#graphql
+    fragment ProductDetails on Product {
+      id
+      title
+      descriptionHtml
+      vendor
+      productType
+      onlineStoreUrl
+      featuredImage {
+        url
+        altText
+      }
+      variants(first: 10) {
+        nodes {
+          id
+          title
+          price {
+            amount
+            currencyCode
+          }
+          sku
+        }
+      }
+      collections(first: 5) {
+        nodes {
+          id
+          title
+        }
+      }
+    }
 `;
 
 /** @typedef {import('./+types/_index').Route} Route */
