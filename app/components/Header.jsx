@@ -11,8 +11,8 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   return (
     <header className="header">
       <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
-        <strong>{shop.name}</strong>
-      </NavLink>test pushing to github
+         <h2><strong>{shop.name}</strong></h2>
+      </NavLink>
       <HeaderMenu
         menu={menu}
         viewport="desktop"
