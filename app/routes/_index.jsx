@@ -23,7 +23,8 @@ export const meta = () => {
 //   return {...deferredData, ...criticalData};
 // }
 
-import {defer} from '@shopify/remix-oxygen';
+
+// import {defer} from '@shopify/remix-oxygen';
 
 export async function loader(args) {
   const criticalData = await loadCriticalData(args);
