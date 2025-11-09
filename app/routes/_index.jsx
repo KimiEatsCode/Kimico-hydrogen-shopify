@@ -13,14 +13,26 @@ export const meta = () => {
 /**
  * @param {Route.LoaderArgs} args
  */
+// export async function loader(args) {
+//   // Start fetching non-critical data without blocking time to first byte
+//   const deferredData = loadDeferredData(args);
+
+//   // Await the critical data required to render initial state of the page
+//   const criticalData = await loadCriticalData(args);
+
+//   return {...deferredData, ...criticalData};
+// }
+
+import {defer} from '@shopify/remix-oxygen';
+
 export async function loader(args) {
-  // Start fetching non-critical data without blocking time to first byte
+  const criticalData = await loadCriticalData(args);
   const deferredData = loadDeferredData(args);
 
-  // Await the critical data required to render initial state of the page
-  const criticalData = await loadCriticalData(args);
-
-  return {...deferredData, ...criticalData};
+  return defer({
+    ...criticalData,
+    ...deferredData,
+  });
 }
 
 /**
@@ -80,7 +92,8 @@ export default function Homepage() {
     <div className="home">
       {/* <FeaturedCollection collection={data.featuredCollection} /> */}
       {/* <RecommendedProducts products={data.recommendedProducts} /> */}
-      <productDetail product={data.productDetail} />
+     
+      <ProductDetail product={data.productDetail} />
     </div>
   );
 }
@@ -131,6 +144,19 @@ function RecommendedProducts({products}) {
         </Await>
       </Suspense>
       <br />
+    </div>
+  );
+}
+
+function ProductDetail({product}) {
+  if (!product) return null;
+  return (
+    <div className="product-detail">
+      <h2>{product.title}</h2>
+      {product.featuredImage && (
+        <Image data={product.featuredImage} sizes="100vw" />
+      )}
+      <div dangerouslySetInnerHTML={{__html: product.descriptionHtml}} />
     </div>
   );
 }
@@ -188,36 +214,48 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
 `;
 
 const PRODUCT_DETAILS_QUERY = `#graphql
-    fragment ProductDetails on Product {
-      id
-      title
-      descriptionHtml
-      vendor
-      productType
-      onlineStoreUrl
-      featuredImage {
-        url
-        altText
-      }
-      variants(first: 10) {
-        nodes {
-          id
-          title
-          price {
-            amount
-            currencyCode
-          }
-          sku
+  fragment ProductDetails on Product {
+    id
+    title
+    descriptionHtml
+    vendor
+    productType
+    onlineStoreUrl
+    featuredImage {
+      url
+      altText
+    }
+    variants(first: 10) {
+      nodes {
+        id
+        title
+        price {
+          amount
+          currencyCode
         }
-      }
-      collections(first: 5) {
-        nodes {
-          id
-          title
-        }
+        sku
       }
     }
+    collections(first: 5) {
+      nodes {
+        id
+        title
+      }
+    }
+  }
+
+  query ProductDetails(
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
+    products(first: 1) {
+      nodes {
+        ...ProductDetails
+      }
+    }
+  }
 `;
+c
 
 /** @typedef {import('./+types/_index').Route} Route */
 /** @typedef {import('storefrontapi.generated').FeaturedCollectionFragment} FeaturedCollectionFragment */
