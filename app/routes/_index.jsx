@@ -7,7 +7,7 @@ import {ProductItem} from '~/components/ProductItem';
  * @type {Route.MetaFunction}
  */
 export const meta = () => {
-  return [{title: 'Hydrogen | Home'}];
+  return [{title: 'KimiCo | Home'}];
 };
 
 /**
@@ -22,19 +22,6 @@ export async function loader(args) {
 
   return {...deferredData, ...criticalData};
 }
-
-
-// import {defer} from '@shopify/remix-oxygen';
-
-// export async function loader(args) {
-//   const criticalData = await loadCriticalData(args);
-//   const deferredData = loadDeferredData(args);
-
-//   return defer({
-//     ...criticalData,
-//     ...deferredData,
-//   });
-// }
 
 /**
  * Load data necessary for rendering content above the fold. This is the critical data
@@ -58,23 +45,9 @@ async function loadCriticalData({context}) {
  * Make sure to not throw any errors here, as it will cause the page to 500.
  * @param {Route.LoaderArgs}
  */
-// function loadDeferredData({context}) {
-//   const recommendedProducts = context.storefront
-//     .query(RECOMMENDED_PRODUCTS_QUERY)
-//     .catch((error) => {
-//       // Log query errors, but don't throw them so the page can still render
-//       console.error(error);
-//       return null;
-//     });
-
-//   return {
-//     recommendedProducts,
-//   };
-// }
-
 function loadDeferredData({context}) {
-  const productDetail = context.storefront
-    .query(PRODUCT_DETAILS_QUERY)
+  const recommendedProducts = context.storefront
+    .query(RECOMMENDED_PRODUCTS_QUERY)
     .catch((error) => {
       // Log query errors, but don't throw them so the page can still render
       console.error(error);
@@ -82,7 +55,7 @@ function loadDeferredData({context}) {
     });
 
   return {
-    productDetail,
+    recommendedProducts,
   };
 }
 
@@ -91,10 +64,8 @@ export default function Homepage() {
   const data = useLoaderData();
   return (
     <div className="home">
-      {/* <FeaturedCollection collection={data.featuredCollection} /> */}
-      {/* <RecommendedProducts products={data.recommendedProducts} /> */}
-     
-      <ProductDetail product={data.productDetail} />
+      <FeaturedCollection collection={data.featuredCollection} />
+      <RecommendedProducts products={data.recommendedProducts} />
     </div>
   );
 }
@@ -145,19 +116,6 @@ function RecommendedProducts({products}) {
         </Await>
       </Suspense>
       <br />
-    </div>
-  );
-}
-
-function ProductDetail({product}) {
-  if (!product) return null;
-  return (
-    <div className="product-detail">
-      <h2>{product.title}</h2>
-      {product.featuredImage && (
-        <Image data={product.featuredImage} sizes="100vw" />
-      )}
-      <div dangerouslySetInnerHTML={{__html: product.descriptionHtml}} />
     </div>
   );
 }
@@ -213,49 +171,6 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
     }
   }
 `;
-
-const PRODUCT_DETAILS_QUERY = `#graphql
-  fragment ProductDetails on Product {
-    id
-    title
-    descriptionHtml
-    productType
-    onlineStoreUrl
-    featuredImage {
-      url
-      altText
-    }
-    variants(first: 1) {
-      nodes {
-        id
-        title
-        price {
-          amount
-          currencyCode
-        }
-        sku
-      }
-    }
-    collections(first: 1) {
-      nodes {
-        id
-        title
-      }
-    }
-  }
-
-  query ProductDetails(
-    $country: CountryCode
-    $language: LanguageCode
-  ) @inContext(country: $country, language: $language) {
-    products(first: 1) {
-      nodes {
-        ...ProductDetails
-      }
-    }
-  }
-`;
-c
 
 /** @typedef {import('./+types/_index').Route} Route */
 /** @typedef {import('storefrontapi.generated').FeaturedCollectionFragment} FeaturedCollectionFragment */
