@@ -14,7 +14,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
 
 <header>
   <a href="/">
-    <img src="https://cdn.shopify.com/s/files/1/0776/7067/8761/files/Kimico_logo.png?v=1762819093" alt="Your Store Logo" />
+    <img src="https://cdn.shopify.com/s/files/1/0776/7067/8761/files/Kimico_logo.png?v=1762819093" alt="KimiCo Logo" width="150px" height="150px"/>
   </a>
 </header>
 
