@@ -377,10 +377,10 @@ button.reset:hover:not(:has(> *)) {
   height: auto;
 }
 
-/* .recommended-products {
+.recommended-products {
   padding-top:20px;
   text-align:center;
-} */
+}
 /*
 * --------------------------------------------------
 * routes/collections._index.tsx
