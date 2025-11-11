@@ -120,14 +120,14 @@ function HeaderMenuMobileToggle() {
   );
 }
 
-// function SearchToggle() {
-//   const {open} = useAside();
-//   return (
-//     <button className="reset" onClick={() => open('search')}>
-//       Search
-//     </button>
-//   );
-// }
+function SearchToggle() {
+  const {open} = useAside();
+  return (
+    <button className="reset" onClick={() => open('search')}>
+      Search
+    </button>
+  );
+}
 
 /**
  * @param {{count: number | null}}
