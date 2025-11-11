@@ -11,8 +11,14 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   return (
     <header className="header">
       <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
-        <strong>{shop.name}</strong>
-      </NavLink>test pushing to github
+
+<header>
+  <a href="/">
+    <img src="https://cdn.shopify.com/s/files/1/0776/7067/8761/files/Kimico_logo.png?v=1762819093" alt="Your Store Logo" />
+  </a>
+</header>
+
+      </NavLink>
       <HeaderMenu
         menu={menu}
         viewport="desktop"
