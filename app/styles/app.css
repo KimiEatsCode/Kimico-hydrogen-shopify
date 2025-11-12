@@ -439,7 +439,9 @@ font-size:2.5rem;
 }
 
 .product-banner {
-  background-color:#A0D489
+  background-color: #a0d489;
+  height: 350px;
+  margin-top: 10%;
 }
 
 .product-banner h1 {
@@ -451,9 +453,13 @@ font-size:2.5rem;
 }
 
 .product-banner img {
-  position:absolute;
-  top:10%;
-  height:auto;
+  height: auto;
+  width: 100%;
+  position: relative;
+  top: -89px;
+  width: 50%;
+  left: 20px;
+  width: 50%;
 }
 
 /*
