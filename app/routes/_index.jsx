@@ -149,9 +149,8 @@ function FeaturedProduct({product}) {
       to={`/products/${product.handle}`}
     >
       {image && (
-        <div className="featured-product-image">
+        <div className="product-image">
           <Image 
-        height="auto"
         alt={image.altText || 'Product Image'}
         aspectRatio="1/1"
         data={image}

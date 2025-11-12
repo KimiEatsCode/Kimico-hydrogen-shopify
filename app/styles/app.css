@@ -438,6 +438,11 @@ font-size:2.5rem;
   width: 100%;
 }
 
+
+.product-banner {
+  background-color:#A0D489
+}
+
 /*
 * --------------------------------------------------
 * routes/products.$handle.tsx
@@ -451,7 +456,7 @@ font-size:2.5rem;
   }
 }
 
-.product-homepage {
+/* .product-homepage {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 2rem;
@@ -459,7 +464,8 @@ font-size:2.5rem;
     grid-template-columns: 1fr 1fr;
     grid-gap: 4rem;
   }
-}
+} */
+
 .product h1 {
   margin-top: 0;
 }
