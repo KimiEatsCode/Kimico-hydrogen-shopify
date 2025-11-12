@@ -76,6 +76,10 @@ export default function Homepage() {
   return (
     <div className="home">
       <div className="product-banner">
+        <div className="product-banner-bg-item1"></div>
+           <div className="product-banner-bg-item1"></div>
+              <div className="product-banner-bg-item1"></div>
+                 <div className="product-banner-bg-item1"></div>
       <FeaturedProduct product={data.featuredProduct} />
       </div>
       {/* <FeaturedCollection collection={data.featuredCollection} /> */}
