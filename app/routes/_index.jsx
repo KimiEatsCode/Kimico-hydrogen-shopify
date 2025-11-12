@@ -75,7 +75,7 @@ export default function Homepage() {
   const data = useLoaderData();
   return (
     <div className="home">
-      <div className="product">
+      <div className="product-banner">
       <FeaturedProduct product={data.featuredProduct} />
       </div>
       {/* <FeaturedCollection collection={data.featuredCollection} /> */}
@@ -151,7 +151,7 @@ function FeaturedProduct({product}) {
       {image && (
         <div className="featured-product-image">
           <Image 
-
+        height="auto"
         alt={image.altText || 'Product Image'}
         aspectRatio="1/1"
         data={image}
