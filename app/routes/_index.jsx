@@ -150,7 +150,13 @@ function FeaturedProduct({product}) {
     >
       {image && (
         <div className="featured-product-image">
-          <Image data={image} sizes="100vw" />
+          <Image 
+
+        alt={image.altText || 'Product Image'}
+        aspectRatio="1/1"
+        data={image}
+        key={image.id}
+        sizes="(min-width: 45em) 50vw, 100vw"/>
         </div>
       )}
       <h1>{product.title}</h1>
