@@ -37,12 +37,13 @@ async function loadCriticalData({context}) {
   ]);
 
  const [{product}] = await Promise.all([
-    context.storefront.query(FEATURED_COLLECTION_QUERY),
+    context.storefront.query(FEATURED_PRODUCT_QUERY),
     // Add other queries here, so that they are loaded in parallel
   ]);
 
   return {
-    featuredCollection: collections.nodes[0],
+    featuredCollection: collections.nodes[0], 
+    featuredProduct: product,
   };
 }
 
@@ -71,7 +72,7 @@ export default function Homepage() {
   const data = useLoaderData();
   return (
     <div className="home">
-      <ProductHomepage key='91113091565853'/>
+      <ProductHomepage product={data.featuredProduct} />
       <FeaturedCollection collection={data.featuredCollection} />
       {/* <RecommendedProducts products={data.recommendedProducts} /> */}
     </div>
@@ -129,6 +130,7 @@ function FeaturedCollection({collection}) {
 //   );
 // }
 
+
 const FEATURED_COLLECTION_QUERY = `#graphql
   fragment FeaturedCollection on Collection {
     id
@@ -181,12 +183,45 @@ const FEATURED_COLLECTION_QUERY = `#graphql
 //   }
 // `;
 
-// {
-//   # You can use `product(handle:)` to query a single product by its handle instead.
-//   product(id: "gid:\/\/shopify\/Product\/1") {
-//     title
-//   }
-// }
+const FEATURED_PRODUCT_QUERY = `#graphql
+  fragment FeaturedCollection on Collection {
+    id
+    title
+    image {
+      id
+      url
+      altText
+      width
+      height
+    }
+    description
+    handle
+  }
+
+query getProductByHandle {
+  product(handle: "crochet-xmas-wreath-with-bow-hair-band") {
+    id
+    title
+    image
+    description
+    variants(first: 1) {
+      edges {
+        cursor
+        node {
+          id
+          title
+          quantityAvailable
+          price {
+            amount
+            currencyCode
+          }
+        }
+      }
+    }
+  }
+}
+`;
+
 
 /** @typedef {import('./+types/_index').Route} Route */
 /** @typedef {import('storefrontapi.generated').FeaturedCollectionFragment} FeaturedCollectionFragment */
