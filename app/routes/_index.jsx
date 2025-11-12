@@ -158,7 +158,9 @@ function FeaturedProduct({product}) {
         sizes="(min-width: 45em) 50vw, 100vw"/>
         </div>
       )}
+      <div className="product-banner-text">
       <h1>{product.title}</h1>
+      </div>
     </Link>
   );
 }
