@@ -12,10 +12,11 @@ import {useVariantUrl} from '~/lib/variants';
  *   loading?: 'eager' | 'lazy';
  * }}
  */
-export function ProductItem({product, loading}) {
+export function ProductHomepage({product, loading}) {
   const variantUrl = useVariantUrl(product.handle);
   const image = product.featuredImage;
   return (
+    <div className="product-homepage">
     <Link
       className="product-item"
       key={product.id}
@@ -36,6 +37,7 @@ export function ProductItem({product, loading}) {
         {/* <Money data={product.priceRange.minVariantPrice} /> */}
       </small>
     </Link>
+    </div>
   );
 }
 

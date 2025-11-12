@@ -1,8 +1,9 @@
-import {Await, useLoaderData, Link} from 'react-router';
-import {Suspense} from 'react';
+// import {Await, useLoaderData, Link} from 'react-router';
+import { useLoaderData, Link} from 'react-router';
+// import {Suspense} from 'react';
 import {Image} from '@shopify/hydrogen';
-import {ProductItem} from '~/components/ProductItem';
-
+// import {ProductItem} from '~/components/ProductItem';
+import {ProductHomepage} from '~/components/ProductHomepage';
 /**
  * @type {Route.MetaFunction}
  */
@@ -15,12 +16,13 @@ export const meta = () => {
  */
 export async function loader(args) {
   // Start fetching non-critical data without blocking time to first byte
-  const deferredData = loadDeferredData(args);
+  // const deferredData = loadDeferredData(args);
 
   // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
-  return {...deferredData, ...criticalData};
+  // return {...deferredData, ...criticalData};
+  return {...criticalData};
 }
 
 /**
@@ -30,6 +32,11 @@ export async function loader(args) {
  */
 async function loadCriticalData({context}) {
   const [{collections}] = await Promise.all([
+    context.storefront.query(FEATURED_COLLECTION_QUERY),
+    // Add other queries here, so that they are loaded in parallel
+  ]);
+
+ const [{product}] = await Promise.all([
     context.storefront.query(FEATURED_COLLECTION_QUERY),
     // Add other queries here, so that they are loaded in parallel
   ]);
@@ -45,26 +52,28 @@ async function loadCriticalData({context}) {
  * Make sure to not throw any errors here, as it will cause the page to 500.
  * @param {Route.LoaderArgs}
  */
-function loadDeferredData({context}) {
-  const recommendedProducts = context.storefront
-    .query(RECOMMENDED_PRODUCTS_QUERY)
-    .catch((error) => {
-      // Log query errors, but don't throw them so the page can still render
-      console.error(error);
-      return null;
-    });
+// function loadDeferredData({context}) {
+//   const recommendedProducts = context.storefront
+//     .query(RECOMMENDED_PRODUCTS_QUERY)
+//     .catch((error) => {
+//       // Log query errors, but don't throw them so the page can still render
+//       console.error(error);
+//       return null;
+//     });
 
-  return {
-    recommendedProducts,
-  };
-}
+//   return {
+//     recommendedProducts,
+//   };
+// }
 
 export default function Homepage() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
   return (
     <div className="home">
-      <RecommendedProducts products={data.recommendedProducts} />
+      <ProductHomepage key='91113091565853'/>
+      <FeaturedCollection collection={data.featuredCollection} />
+      {/* <RecommendedProducts products={data.recommendedProducts} /> */}
     </div>
   );
 }
@@ -97,27 +106,28 @@ function FeaturedCollection({collection}) {
  *   products: Promise<RecommendedProductsQuery | null>;
  * }}
  */
-function RecommendedProducts({products}) {
-  return (
-    <div className="recommended-products">
-      <h2>Products</h2>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={products}>
-          {(response) => (
-            <div className="recommended-products-grid">
-              {response
-                ? response.products.nodes.map((product) => (
-                    <ProductItem key={product.id} product={product} />
-                  ))
-                : null}
-            </div>
-          )}
-        </Await>
-      </Suspense>
-      <br />
-    </div>
-  );
-}
+// function RecommendedProducts({products}) {
+//   return (
+//     <div className="recommended-products">
+//       <h2>Products</h2>
+//       <Suspense fallback={<div>Loading...</div>}>
+//         <Await resolve={products}>
+//           {(response) => (
+//             <div className="recommended-products-grid">
+//               <div className="cta">Check Out Our Latest Products</div>
+//               {response
+//                 ? response.products.nodes.map((product) => (
+//                     <ProductItem key={product.id} product={product} />
+//                   ))
+//                 : null}
+//             </div>
+//           )}
+//         </Await>
+//       </Suspense>
+//       <br />
+//     </div>
+//   );
+// }
 
 const FEATURED_COLLECTION_QUERY = `#graphql
   fragment FeaturedCollection on Collection {
@@ -142,36 +152,43 @@ const FEATURED_COLLECTION_QUERY = `#graphql
   }
 `;
 
-const RECOMMENDED_PRODUCTS_QUERY = `#graphql
-  fragment RecommendedProduct on Product {
-    id
-    title
-    handle
-    priceRange {
-      minVariantPrice {
-        amount
-        currencyCode
-      }
-    }
-    featuredImage {
-      id
-      url
-      altText
-      width
-      height
-    }
-  }
-  query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    products(first: 4, sortKey: UPDATED_AT, reverse: true) {
-      nodes {
-        ...RecommendedProduct
-      }
-    }
-  }
-`;
+// const RECOMMENDED_PRODUCTS_QUERY = `#graphql
+//   fragment RecommendedProduct on Product {
+//     id
+//     title
+//     handle
+//     priceRange {
+//       minVariantPrice {
+//         amount
+//         currencyCode
+//       }
+//     }
+//     featuredImage {
+//       id
+//       url
+//       altText
+//       width
+//       height
+//     }
+//   }
+//   query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
+//     @inContext(country: $country, language: $language) {
+//     products(first: 1, sortKey: UPDATED_AT, reverse: true) {
+//       nodes {
+//         ...RecommendedProduct
+//       }
+//     }
+//   }
+// `;
+
+// {
+//   # You can use `product(handle:)` to query a single product by its handle instead.
+//   product(id: "gid:\/\/shopify\/Product\/1") {
+//     title
+//   }
+// }
 
 /** @typedef {import('./+types/_index').Route} Route */
 /** @typedef {import('storefrontapi.generated').FeaturedCollectionFragment} FeaturedCollectionFragment */
-/** @typedef {import('storefrontapi.generated').RecommendedProductsQuery} RecommendedProductsQuery */
+// /** @typedef {import('storefrontapi.generated').RecommendedProductsQuery} RecommendedProductsQuery */
 /** @typedef {import('@shopify/remix-oxygen').SerializeFrom<typeof loader>} LoaderReturnData */
