@@ -1,6 +1,5 @@
 import {Link} from 'react-router';
-// import {Image, Money} from '@shopify/hydrogen';
-import {Image} from '@shopify/hydrogen';
+import {Image, Money} from '@shopify/hydrogen';
 import {useVariantUrl} from '~/lib/variants';
 
 /**
@@ -33,7 +32,7 @@ export function ProductItem({product, loading}) {
       )}
       <h4>{product.title}</h4>
       <small>
-        {/* <Money data={product.priceRange.minVariantPrice} /> */}
+        <Money data={product.priceRange.minVariantPrice} />
       </small>
     </Link>
   );

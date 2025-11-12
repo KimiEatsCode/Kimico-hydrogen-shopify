@@ -71,7 +71,7 @@ export default function Homepage() {
   const data = useLoaderData();
   return (
     <div className="home">
-      <ProductItem product={data.featuredProduct} />
+      {data.featuredProduct} 
       <FeaturedCollection collection={data.featuredCollection} />
       {/* <RecommendedProducts products={data.recommendedProducts} /> */}
     </div>
@@ -203,6 +203,7 @@ query getProductByHandle {
     title
     image
     description
+    handle
     variants(first: 1) {
       edges {
         cursor
