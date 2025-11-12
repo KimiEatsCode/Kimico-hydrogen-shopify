@@ -2,7 +2,6 @@
 import { useLoaderData, Link} from 'react-router';
 // import {Suspense} from 'react';
 import {Image} from '@shopify/hydrogen';
-import {ProductItem} from '~/components/ProductItem';
 /**
  * @type {Route.MetaFunction}
  */
@@ -23,6 +22,7 @@ export async function loader(args) {
   // return {...deferredData, ...criticalData};
   return {...criticalData};
 }
+//ADD deferred data function back later
 
 /**
  * Load data necessary for rendering content above the fold. This is the critical data
@@ -36,7 +36,11 @@ async function loadCriticalData({context}) {
   ]);
 
  const [{product}] = await Promise.all([
-    context.storefront.query(FEATURED_PRODUCT_QUERY),
+    context.storefront.query(FEATURED_PRODUCT_QUERY, {
+      variables: {
+        handle: 'crochet-xmas-wreath-with-bow-hair-band',
+      },
+    }),
     // Add other queries here, so that they are loaded in parallel
   ]);
 
@@ -71,8 +75,10 @@ export default function Homepage() {
   const data = useLoaderData();
   return (
     <div className="home">
-      {data.featuredProduct} 
-      <FeaturedCollection collection={data.featuredCollection} />
+      <div className="product">
+      <FeaturedProduct product={data.featuredProduct} />
+      </div>
+      {/* <FeaturedCollection collection={data.featuredCollection} /> */}
       {/* <RecommendedProducts products={data.recommendedProducts} /> */}
     </div>
   );
@@ -83,23 +89,23 @@ export default function Homepage() {
  *   collection: FeaturedCollectionFragment;
  * }}
  */
-function FeaturedCollection({collection}) {
-  if (!collection) return null;
-  const image = collection?.image;
-  return (
-    <Link
-      className="featured-collection"
-      to={`/collections/${collection.handle}`}
-    >
-      {image && (
-        <div className="featured-collection-image">
-          <Image data={image} sizes="100vw" />
-        </div>
-      )}
-      <h1>{collection.title}</h1>
-    </Link>
-  );
-}
+// function FeaturedCollection({collection}) {
+//   if (!collection) return null;
+//   const image = collection?.image;
+//   return (
+//     <Link
+//       className="featured-collection"
+//       to={`/collections/${collection.handle}`}
+//     >
+//       {image && (
+//         <div className="featured-collection-image">
+//           <Image data={image} sizes="100vw" />
+//         </div>
+//       )}
+//       <h1>{collection.title}</h1>
+//     </Link>
+//   );
+// }
 
 /**
  * @param {{
@@ -129,6 +135,28 @@ function FeaturedCollection({collection}) {
 //   );
 // }
 
+/**
+ * @param {{
+ *   product: FeaturedProductFragment;
+ * }}
+ */
+function FeaturedProduct({product}) {
+  if (!product) return null;
+  const image = product?.featuredImage;
+  return (
+    <Link
+      className="product"
+      to={`/products/${product.handle}`}
+    >
+      {image && (
+        <div className="featured-product-image">
+          <Image data={image} sizes="100vw" />
+        </div>
+      )}
+      <h1>{product.title}</h1>
+    </Link>
+  );
+}
 
 const FEATURED_COLLECTION_QUERY = `#graphql
   fragment FeaturedCollection on Collection {
@@ -183,43 +211,36 @@ const FEATURED_COLLECTION_QUERY = `#graphql
 // `;
 
 const FEATURED_PRODUCT_QUERY = `#graphql
-  fragment FeaturedCollection on Collection {
+  fragment FeaturedProduct on Product {
     id
     title
-    image {
+    description
+    handle
+    featuredImage {
       id
       url
       altText
       width
       height
     }
-    description
-    handle
-  }
-
-query getProductByHandle {
-  product(handle: "crochet-xmas-wreath-with-bow-hair-band") {
-    id
-    title
-    image
-    description
-    handle
     variants(first: 1) {
-      edges {
-        cursor
-        node {
-          id
-          title
-          quantityAvailable
-          price {
-            amount
-            currencyCode
-          }
+      nodes {
+        id
+        title
+        quantityAvailable
+        price {
+          amount
+          currencyCode
         }
       }
     }
   }
-}
+
+  query getProductByHandle($handle: String!) {
+    product(handle: $handle) {
+      ...FeaturedProduct
+    }
+  }
 `;
 
 
