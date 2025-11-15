@@ -77,9 +77,9 @@ export default function Homepage() {
     <div className="home">
       <div className="product-banner">
         <div className="product-banner-bg-item1"></div>
-           <div className="product-banner-bg-item1"></div>
-              <div className="product-banner-bg-item1"></div>
-                 <div className="product-banner-bg-item1"></div>
+           <div className="product-banner-bg-item2"></div>
+              <div className="product-banner-bg-item3"></div>
+                 <div className="product-banner-bg-item4"></div>
       <FeaturedProduct product={data.featuredProduct} />
       </div>
       {/* <FeaturedCollection collection={data.featuredCollection} /> */}
@@ -153,6 +153,7 @@ function FeaturedProduct({product}) {
       to={`/products/${product.handle}`}
     >
       {image && (
+        
         <div className="product-image">
           <Image 
         alt={image.altText || 'Product Image'}
